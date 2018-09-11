@@ -388,8 +388,10 @@ define([
             .appendChild(document.createElement(wel));
           if (wel === 'input') widgetEl.type = 'range';
           createWidgetExt(config.context, wclass, widgetEl, block[wtarget]);
+          var rf_power_new_set = document.createElement('tt');
+          rf_power_new_set.setAttribute("id", "rf-power-ake");
           var numberEl = row.appendChild(document.createElement('td'))
-            .appendChild(document.createElement('tt'));
+            .appendChild(rf_power_new_set);
           createWidgetExt(config.context, NumberWidget, numberEl, block[wtarget]);
         }
         addRow('RF', 'rf_power', Meter, 'meter');
@@ -413,25 +415,40 @@ define([
   // Silly single-purpose widget 'till we figure out more where the UI is going
   // TODO: Inherit from CommandButton
   function SaveButton(config) {
-    var receiver = config.target.get();
-    var selectedRecord = config.actions.selectedRecord;
+    let control_flag = 0;
+    let timer_control;
+    // var selectedRecord = config.actions.selectedRecord;
     var panel = this.element = config.element;
     panel.classList.add('panel');
     
     var button = panel.querySelector('button');
     if (!button) {
       button = panel.appendChild(document.createElement('button'));
-      button.textContent = '+ Save to database';
+      button.textContent = 'Start save to database';
     }
     button.disabled = false;
     button.onclick = function (event) {
-      var record = {
-        type: 'channel',
-        freq: receiver.rec_freq.get(),
-        mode: receiver.mode.get(),
-        label: 'untitled'
-      };
-      selectedRecord.set(config.writableDB.add(record));
+      control_flag++;
+      if ( control_flag === 1 ) {
+        button.textContent = 'Stop save to database';
+        timer_control = setInterval(function() {
+          var receiver = config.target.get();
+          var record = {
+            type: 'channel',
+            freq: receiver.rec_freq.get(),
+            mode: receiver.mode.get(),
+            label: 'untitled'
+          };
+          console.log("RF Power : " + document.getElementById("rf-power-ake").innerHTML);
+          console.log("Freq : " + record.freq);
+        }, 2000);
+      } else {
+        button.textContent = 'Start save to database';
+        clearInterval(timer_control);
+        control_flag = 0;
+      }
+
+      // selectedRecord.set(config.writableDB.add(record));
     };
   }
   exports.SaveButton = SaveButton;
