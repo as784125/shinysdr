@@ -39,14 +39,11 @@
 </script>
 
 <shinysdr-pane id="section-system-menu" visible="true">
-  <h2>ShinySDR</h2>
+  <h2>Spectrum view</h2>
   <div class="sidebar frame">
     <ul class="system-menu-list" id="shinysdr-pane-list">
     </ul>
-    <ul class="system-menu-list">
-      <li><a href="/manual/">ShinySDR Manual</a></li>
-      <li><a href="flow-graph">Debug: flow graph</a></li>
-    </ul>
+    
     <details class="panel frame" id="client-audio" data-widget="PickWidget" data-target="audio">
       <summary>Audio stream</summary>
     </details>
@@ -64,15 +61,6 @@
   <div id="audio-spectrum-monitor" data-widget="Monitor" data-target="audio.monitor"></div>
 </shinysdr-pane>
 
-<shinysdr-pane id="section-map" class="stretchy" visible="false">
-  <h2>Map</h2>
-  <div id="map"></div>
-</shinysdr-pane>
-
-<shinysdr-pane id="section-telemetry" visible="false">
-  <h2>Telemetry</h2>
-  <div class="sidebar frame" data-widget="PickWidget" data-target="root_object.telemetry_store"></div>
-</shinysdr-pane>
 
 <shinysdr-pane id="section-radio" visible="true">
   <h2>Radio Config</h2>
