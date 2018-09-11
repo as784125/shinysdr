@@ -350,9 +350,9 @@ config.serve_web(
     root_cap='%(root_cap)s',
     
     # Page title / station name
-    title='ShinySDR')
+    title='Spectrum view')
 ''' % {
-        'root_cap': generate_cap(),
+        'root_cap': 'spectrum',
         'audio_comment': '' if has_audio else '# ',
         'audio_rx_name': audio_rx_name,
         'osmosdr_comment': '' if has_osmosdr else '# ',
