@@ -16,104 +16,152 @@
   You should have received a copy of the GNU General Public License
   along with ShinySDR.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<html
-    xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:t="http://twistedmatrix.com/ns/twisted.web.template/0.1"
-    lang="en"
-    class="pane-structured-page"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://twistedmatrix.com/ns/twisted.web.template/0.1" lang="en"
+  class="pane-structured-page">
+
+<head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title t:render="title"></title>
   <link rel="manifest" href="/client/web-app-manifest.json" />
   <link rel="stylesheet" href="/client/ui.css" />
   <link rel="stylesheet" data-widget="ThemeApplier" data-target="client.theme" />
   <meta name="viewport" content="width=device-width" />
-</head><body class="pane-structured-body main-not-yet-run">
+  <script src="https://cdn.klokantech.com/maptilerlayer/v1/index.js"></script>
+  <!-- <script src="https://maps.google.com/maps/api/js?key=AIzaSyDVCIeLpIM8iWwo2Q82s8Ai-rxW-ZuhvWk&amp;sensor=false" type="text/javascript"></script> -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBbzTQ0BMUZmg1OnUwJXKY_lvehQe8Da0E"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-<dialog open="" id="loading-information-dialog">
-  <progress id="loading-information-progress" value="0"></progress>
-  <pre id="loading-information-text">JS not loaded</pre>
-</dialog>
-<script>
-  document.getElementById('loading-information-text').textContent = 'Loading client…';
-  document.getElementById('loading-information-progress').value = 0.01;
-</script>
+  <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #googleMap {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+     /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 
-<shinysdr-pane id="section-system-menu" visible="true">
-  <h2>Spectrum view</h2>
-  <div class="sidebar frame">
-    <ul class="system-menu-list" id="shinysdr-pane-list">
-    </ul>
-    
-    <details class="panel frame" id="client-audio" data-widget="PickWidget" data-target="audio">
-      <summary>Audio stream</summary>
-    </details>
-    <div data-widget="Select" data-target="client.theme" title="Theme"></div>
-    <button id="myBtnDFScan">DF Scan</button>
-  </div>
-</shinysdr-pane>
+</head>
 
-<shinysdr-pane id="section-spectrum" class="stretchy" visible="true">
-  <h2>RF Spectrum <span data-target="root_object.monitor" data-widget="MonitorQuickOptions"></span></h2>
-  <div id="rf-spectrum-monitor" data-widget="Monitor" data-target="root_object.monitor" data-is-rf-spectrum=""></div>
-</shinysdr-pane>
+<body class="pane-structured-body main-not-yet-run">
 
-<shinysdr-pane id="section-audio-spectrum" class="stretchy" visible="false">
-  <h2>Audio Spectrum <span data-target="audio.monitor" data-widget="MonitorQuickOptions"></span></h2>
-  <div id="audio-spectrum-monitor" data-widget="Monitor" data-target="audio.monitor"></div>
-</shinysdr-pane>
+  <dialog open="" id="loading-information-dialog">
+    <progress id="loading-information-progress" value="0"></progress>
+    <pre id="loading-information-text">JS not loaded</pre>
+  </dialog>
+  <script>
+    document.getElementById('loading-information-text').textContent = 'Loading client…';
+    document.getElementById('loading-information-progress').value = 0.01;
+  </script>
 
+  <shinysdr-pane id="section-system-menu" visible="true">
+    <h2>Spectrum view</h2>
+    <div class="sidebar frame">
+      <ul class="system-menu-list" id="shinysdr-pane-list">
+      </ul>
 
-<shinysdr-pane id="section-radio" visible="true">
-  <h2>Radio Config</h2>
-  <div class="sidebar">
-    <div data-widget="Top" data-target="root_object" id="_radio"></div>
-  </div>
-</shinysdr-pane>
-
-<shinysdr-pane id="section-db" visible="true">
-  <h2>Frequency DB</h2>
-  <div class="sidebar frame">
-    <div class="panel" data-widget="RecordDetails" data-target="actions.selectedRecord"></div>
-    <div class="panel" data-widget="FreqList" id="freqlist"></div>
-    <div class="panel">
-      <details class="frame" id="choose-databases">
-        <summary>Choose databases</summary>
-        <div data-widget="PickWidget" data-target="client.databases"></div>
+      <details class="panel frame" id="client-audio" data-widget="PickWidget" data-target="audio">
+        <summary>Audio stream</summary>
       </details>
+      <div data-widget="Select" data-target="client.theme" title="Theme"></div>
+      <button id="myBtnDFScan">DF Scan</button>
     </div>
-  </div>
-</shinysdr-pane>
-<!-- popup -->
-<div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close">x</span>
-      <h2>Modal Header</h2>
-    </div>
-    <div class="modal-body">
-      <p>Some text in the Modal Body</p>
-      <p>Some other text...</p>
-    </div>
-    <div class="modal-footer">
-      <h3>Modal Footer</h3>
-    </div>
-  </div>
-</div>
 
-<script src="/client/require.js"></script>
-<script>
-  'use strict';
-  requirejs.config({
-    baseUrl: "/client",
-  });
-  requirejs(['main'], function (main) {
-    main({
-      stateUrl: <t:transparent t:render='quoted_state_url'/>,
-      audioUrl: <t:transparent t:render='quoted_audio_url'/>,
-      databasesUrl: 'dbs/',
-      writableDatabaseUrl: 'wdb/',
+  </shinysdr-pane>
+
+  <shinysdr-pane id="section-spectrum" class="stretchy" visible="true">
+    <h2>RF Spectrum <span data-target="root_object.monitor" data-widget="MonitorQuickOptions"></span></h2>
+    <div id="rf-spectrum-monitor" data-widget="Monitor" data-target="root_object.monitor" data-is-rf-spectrum=""></div>
+  </shinysdr-pane>
+
+  <shinysdr-pane id="section-audio-spectrum" class="stretchy" visible="false">
+    <h2>Audio Spectrum <span data-target="audio.monitor" data-widget="MonitorQuickOptions"></span></h2>
+    <div id="audio-spectrum-monitor" data-widget="Monitor" data-target="audio.monitor"></div>
+
+  </shinysdr-pane>
+
+  <shinysdr-pane id="section-radio" visible="true">
+    <h2>Radio Config</h2>
+    <div class="sidebar">
+      <div data-widget="Top" data-target="root_object" id="_radio"></div>
+    </div>
+  </shinysdr-pane>
+
+  <shinysdr-pane id="section-db" visible="true">
+    <h2>Frequency DB</h2>
+    <div class="sidebar frame">
+      <div class="panel" data-widget="RecordDetails" data-target="actions.selectedRecord"></div>
+      <div class="panel" data-widget="FreqList" id="freqlist"></div>
+      <div class="panel">
+        <details class="frame" id="choose-databases">
+          <summary>Choose databases</summary>
+          <div data-widget="PickWidget" data-target="client.databases"></div>
+        </details>
+      </div>
+    </div>
+  </shinysdr-pane>
+<!--popup map -->
+  <div id="myModal" class="modal-popup">
+    <!-- Modal content -->
+    <div class="modal-content-popup">
+      <div class="modal-header">
+        <h1 style="text-align: center; ">Direction Finder</h1>
+        <span class="close">x</span>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row">
+          <div class="col-sm">
+            <!--data-->
+              <div class="row">
+                <h3>Frequency</h3> 
+                <input type="text" value="999999" readonly="readonly" /> 
+              </div>
+              <div class="row">
+                <h4>Direction</h4> <input type="text" value="888888" readonly="readonly" />
+              </div>
+          </div>
+          <div class="col-sm">
+            <!--map-->
+            <div id="googleMap" style="width:600px;height:400px;"></div>
+          </div>
+        </div>
+      </div>
+      </div>
+  
+      <div class="modal-footer">
+        <h4>Footer</h4>
+      </div>
+  
+    </div>
+   </div>
+
+<!--popup map -->
+
+  <script src="/client/require.js"></script>
+  <script>
+    'use strict';
+    requirejs.config({
+      baseUrl: "/client",
     });
-  });
-</script>
-</body></html>
+    requirejs(['main'], function (main) {
+      main({
+        stateUrl: <t:transparent t:render='quoted_state_url'/>,
+        audioUrl: <t:transparent t:render='quoted_audio_url'/>,
+        databasesUrl: 'dbs/',
+        writableDatabaseUrl: 'wdb/',
+      });
+    });  
+  </script>
+
+</body>
+
+</html>

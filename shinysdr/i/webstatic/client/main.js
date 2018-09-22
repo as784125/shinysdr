@@ -240,7 +240,12 @@ define([
           window.dispatchEvent(resize);
         }, 100);
 
+
+
         // Start edit here
+
+        
+
         var modal = document.getElementById('myModal');
         var span = document.getElementsByClassName("close")[0];
         var myBtnDFScan = document.getElementById("myBtnDFScan")
@@ -255,9 +260,56 @@ define([
             modal.style.display = "none";
           }
         }
-        // End here
         
+      var map,infoWindow,Marker;
+      function initMap() {
+        var myLatLng = {lat:50, lng:100.50};
+        map = new google.maps.Map(document.getElementById('googleMap'), {
+          center: myLatLng,
+          zoom: 10
+        });
+        Marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+         
+          });
+        
+        infoWindow = new google.maps.InfoWindow;
+
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            Marker.setPosition(pos);
+            infoWindow.setContent('Your Location.');
+            infoWindow.open(map);
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+      }
+      initMap()
+    
+        // End here
+
         // globals for debugging / interactive programming purposes only
+        window.initMapa = initMap;
         window.DfreqDB = freqDB;
         window.DwritableDB = writableDB;
         window.DradioCell = remoteCell;
@@ -266,6 +318,9 @@ define([
       }
     }
   }
+
+
   
   return main;
 });
+

@@ -118,14 +118,7 @@ class SiteWithDefaultHeaders(Site):
         """overrides Site"""
         # TODO remove unsafe-inline (not that it really matters as we are not doing sloppy templating)
         # TODO: Once we know our own hostname(s), or if we start using the same port for WebSockets, tighten the connect-src policy
-        request.setHeader(b'Content-Security-Policy', b';'.join([
-            b"default-src 'self' 'unsafe-inline' *",
-            b"connect-src 'self' ws://*:* wss://*:*",
-            b"img-src 'self' data: blob:",
-            b"media-src http: https: file: blob:",  # client audio tools wish to load user-specified audio
-            b"object-src 'none'",
-            b"base-uri 'self'",
-        ]))
+
         request.setHeader(b'Referrer-Policy', b'no-referrer')
         request.setHeader(b'X-Content-Type-Options', b'nosniff')
         return Site.getResourceFor(self, request)
