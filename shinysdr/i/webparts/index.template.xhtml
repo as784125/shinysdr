@@ -113,36 +113,38 @@
     <!-- Modal content -->
     <div class="modal-content-popup">
       <div class="modal-header">
-        <h1 style="text-align: center; ">Direction Finder</h1>
-        <span class="close">x</span>
+        <h1 style="text-align: center; ">Direction Finding</h1>
+        <span class="close">X</span>
       </div>
       <div class="modal-body">
-        <div class="container">
+        <div class="container-fluid">
           <div class="row">
-          <div class="col-sm">
-            <!--data-->
+            <div class="col-xm-12 col-sm-12 col-md-4 col-lg-4">
+              <!--data-->
               <div class="row">
-                <h3>Frequency</h3> 
-                <input type="text" value="999999" readonly="readonly" /> 
+                
+                <div class="col-6" style="padding:0%;text-align: center"><p>Frequency</p></div>
+                <div class="col-6"><input type="text" value="999999" readonly="readonly" style="height: 25px; width: 100%;" /></div>
+                
               </div>
               <div class="row">
-                <h4>Direction</h4> <input type="text" value="888888" readonly="readonly" />
+                <div class="col-6" style="padding:0%; text-align:center"><p>Direction</p></div>
+                <div class="col-6"><input type="text" value="888888" readonly="readonly" style="height:25px; width: 100%;"/></div>
+                
               </div>
-          </div>
-          <div class="col-sm">
-            <!--map-->
-            <div id="googleMap" style="width:600px;height:400px;"></div>
+              <!-- data -->
+            </div>
+            <div class="col-md-1 col-lg-1"></div>
+            <div class="col-xm-12 col-sm-12 col-md-7 col-lg-7">
+              <!--map-->
+              <div id="googleMap" style="width:100%;height:15em"></div>
+              <!-- map -->
+            </div>
           </div>
         </div>
       </div>
-      </div>
-  
-      <div class="modal-footer">
-        <h4>Footer</h4>
-      </div>
-  
     </div>
-   </div>
+  </div>
 
 <!--popup map -->
 
